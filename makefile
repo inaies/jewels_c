@@ -1,13 +1,13 @@
 CFLAGS=-Wall -std=c99 
 LIBS=-lm -lallegro_ttf -lallegro_image -lallegro_primitives -lallegro_font -lallegro
 
-all: hello
+all: jewels
 
-hello: hello.o
-	gcc -o hello hello.o $(CFLAGS) $(LIBS)
+jewels: main.o
+	gcc -o jewels main.o $(CFLAGS) $(LIBS)
 
-hello.o: hello.c
-	gcc -c hello.c $(CFLAGS)
+main.o: main.c
+	gcc -c main.c $(CFLAGS)
 
 clean:
 	rm -f *~ *.o
