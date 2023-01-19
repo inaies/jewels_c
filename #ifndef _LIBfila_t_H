@@ -1,0 +1,8 @@
+#ifndef _LIBfila_t_H
+#define _LIBfila_t_H
+
+struct l_piece
+{
+    int x, y;
+};
+typedef struct l_piece l_piece_t;
