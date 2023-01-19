@@ -31,7 +31,7 @@ int main()
     ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue(); // fila de eventos   
     must_init(queue, "queue");
 
-    ALLEGRO_DISPLAY* disp = al_create_display(640, 480); //inicializa as configuracoes do display
+    ALLEGRO_DISPLAY* disp = al_create_display(700, 480); //inicializa as configuracoes do display
     must_init(disp, "display");
 
     ALLEGRO_FONT* font = al_create_builtin_font();//incializa fonte a ser usada
