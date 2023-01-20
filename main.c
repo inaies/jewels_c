@@ -15,20 +15,27 @@ void must_init(bool test, const char *description)
     exit(1);
 }
 
-void imprime_jogo()
+void menu()
 {
-    ALLEGRO_FONT* font = al_create_builtin_font();
+    ALLEGRO_FONT* font = al_create_builtin_font();//incializa fonte a ser usada
     must_init(font, "font");
 
-    al_draw_text(font, al_map_rgb(255, 255, 255), 250, 300, 0, "aaaaaaaaa");
+    al_draw_text(font, al_map_rgb(255, 255, 255), 250, 300, 0, "espaço pra jogar \n");                
 }
 
+enum STATE
+{
+    MENU,
+    JOGO,
+    FIM
+};
 
 int main()
 {
 
-    int done = 0, menu = 1, jogo = 0;
+    int done = 0, redraw = 1, jogo = 0;
     int x = 100, y = 100;
+    int estado_do_jogo = MENU;
 
     must_init(al_init(), "allegro");
 
@@ -80,28 +87,30 @@ int main()
         al_wait_for_event(queue, &event);
         al_get_keyboard_state(&tecla);//pega tecla pressionada;
 
-
         switch(event.type)
         {
             case ALLEGRO_EVENT_TIMER:
-                // if(key[ALLEGRO_KEY_UP])
-                //     y = y - 3;
-                // if(key[ALLEGRO_KEY_DOWN])
-                //     y = y + 3;
-                // if(key[ALLEGRO_KEY_LEFT])
-                //     x = x - 3;
-                // if(key[ALLEGRO_KEY_RIGHT])
-                //     x = x + 3;
+                redraw = 1;
+                if (estado_do_jogo == MENU)
+                {
+                    if(key[ALLEGRO_KEY_SPACE])
+                        estado_do_jogo = JOGO;
+                }
 
+                if(estado_do_jogo == JOGO)
+                {
+                    if(key[ALLEGRO_KEY_UP])
+                        estado_do_jogo = FIM;
+                }
+
+                if(estado_do_jogo == FIM)
+                {
+                    if (key[ALLEGRO_KEY_DOWN])
+                        estado_do_jogo = MENU;
+                }
+                
                 if(key[ALLEGRO_KEY_ESCAPE])
                     done = 1;
-
-                if(key[ALLEGRO_KEY_SPACE])
-                {
-                    jogo = 1;
-                    menu = 0;
-                    done = 0;
-                }
 
                 for(int i = 0; i < ALLEGRO_KEY_MAX; i++)
                     key[i] &= KEY_SEEN;
@@ -127,17 +136,23 @@ int main()
         if(done)
             break;
 
-        if(menu && (al_is_event_queue_empty(queue)))
+        if(redraw && (al_is_event_queue_empty(queue)))
         {
-            al_clear_to_color(al_map_rgb(1, 12, 20));
-            al_draw_text(font, al_map_rgb(255, 255, 255), 250, 300, 0, "Hello world!");
-            al_draw_filled_rectangle(x, y, 20+x, 20+y, al_map_rgba_f(24, 100, 0, 0));
-            // al_draw_filled_triangle(35, 350, 850, 375, 350, 400, al_map_rgb(240, 44, 0));
+            if(estado_do_jogo == MENU)
+                menu();
+            if(estado_do_jogo == JOGO)
+            {
+                al_draw_filled_rectangle(x, y, 20+x, 20+y, al_map_rgba_f(24, 100, 0, 0));
+            }
+            if(estado_do_jogo == FIM)
+            {
+                al_draw_text(font, al_map_rgb(255, 255, 255), 250, 300, 0, "fim de jogo \n");                
+            }
             al_flip_display();
-            if(jogo)
-                imprime_jogo();           
-        }
 
+            al_clear_to_color(al_map_rgb(0, 0, 0));
+            redraw = 0;
+        }
     }
 
     al_destroy_bitmap(image);
