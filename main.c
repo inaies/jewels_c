@@ -4,6 +4,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "lib.h"
 
 void must_init(bool test, const char *description)
@@ -15,6 +16,7 @@ void must_init(bool test, const char *description)
     exit(1);
 }
 
+
 void menu()
 {
     ALLEGRO_FONT* font = al_create_builtin_font();//incializa fonte a ser usada
@@ -23,6 +25,67 @@ void menu()
     al_draw_text(font, al_map_rgb(255, 255, 255), 250, 300, 0, "espaço pra jogar \n");                
 }
 
+enum JOIAS
+{
+    joia_amarela,
+    joia_azul,
+    joia_verde,
+    joia_rosa,
+};
+
+void jogo_principal(int x, int y)
+{
+    int x_piece = 100, y_piece = 100;
+    int piece;
+
+    srand(clock());
+
+    ALLEGRO_FONT* font = al_create_builtin_font();//incializa fonte a ser usada
+    must_init(font, "font");
+
+    ALLEGRO_BITMAP* joia_amarela = al_load_bitmap("joia_amarela.png");
+    must_init(joia_amarela, "image");
+
+    ALLEGRO_BITMAP* joia_azul = al_load_bitmap("joia_azul.png");
+    must_init(joia_azul, "image");
+
+    ALLEGRO_BITMAP* joia_verde = al_load_bitmap("joia_verde.png");
+    must_init(joia_verde, "image");
+
+    ALLEGRO_BITMAP* joia_rosa = al_load_bitmap("joia_rosa.png");
+    must_init(joia_rosa, "image");
+
+    // for(int i = 0; i < 8; i++)
+        for(int j = 0; j < 8; j++)
+        {
+            piece = rand() % 4;
+            switch(piece)
+            {
+                case(0):
+                    desenha_joia(joia_amarela, 50, 50, x_piece, y_piece);
+                    break;
+                case(1):
+                    desenha_joia(joia_azul, 50, 50, x_piece, y_piece);
+                    break;
+                case(2):
+                    desenha_joia(joia_verde, 50, 50, x_piece, y_piece);
+                    break;
+                case(3):
+                    desenha_joia(joia_rosa, 50, 50, x_piece, y_piece);
+                    break;
+            }
+            x_piece += 50;
+        }
+
+    // al_draw_filled_rectangle(x, y, 20+x, 20+y, al_map_rgba_f(24, 100, 0, 0));
+
+    al_destroy_bitmap(joia_amarela);
+    al_destroy_bitmap(joia_azul);
+    al_destroy_bitmap(joia_verde);
+    al_destroy_bitmap(joia_rosa);
+}
+
+
 enum STATE
 {
     MENU,
@@ -30,10 +93,11 @@ enum STATE
     FIM
 };
 
+
 int main()
 {
 
-    int done = 0, redraw = 1, jogo = 0;
+    int done = 0, redraw = 1;
     int x = 100, y = 100;
     int estado_do_jogo = MENU;
 
@@ -78,7 +142,7 @@ int main()
     //zera array que contem todas as teclas que podem ser pressionadas
     memset(key, 0, sizeof(key));
 
-    al_hide_mouse_cursor(disp);
+    // al_hide_mouse_cursor(disp);
 
     al_start_timer(timer);
     while(1)
@@ -142,7 +206,7 @@ int main()
                 menu();
             if(estado_do_jogo == JOGO)
             {
-                al_draw_filled_rectangle(x, y, 20+x, 20+y, al_map_rgba_f(24, 100, 0, 0));
+                jogo_principal(x, y);
             }
             if(estado_do_jogo == FIM)
             {

@@ -3,14 +3,17 @@ LIBS=-lm -lallegro_ttf -lallegro_image -lallegro_primitives -lallegro_font -lall
 
 all: jewels
 
-jewels: main.o
-	gcc -o jewels main.o $(CFLAGS) $(LIBS)
+jewels: main.o lib.o
+	gcc -o jewels main.o lib.o $(CFLAGS) $(LIBS)
 
 main.o: main.c
 	gcc -c main.c $(CFLAGS)
 
+lib.o: lib.c
+	gcc -c lib.c $(CFLAGS)
+
 clean:
-	rm -f *~ *.o
+	rm -f *~ 
 
 purge: clean
-	rm -f hello
+	rm -f *.o *.gch hello

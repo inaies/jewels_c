@@ -14,5 +14,8 @@ struct piece
 };
 typedef struct piece piece_t;
 
+// void must_init(bool test, const char *description);
+
+void desenha_joia(ALLEGRO_BITMAP *image, int h, int w, int x, int y);
 
 #endif
