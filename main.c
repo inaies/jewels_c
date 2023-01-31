@@ -7,16 +7,7 @@
 #include <time.h>
 #include "lib.h"
 #include "matrix.h"
-
-void must_init(bool test, const char *description)
-{
-    if(test)    
-        return;
-
-    printf("couldn't initialize %s \n", description);
-    exit(1);
-}
-
+#include "mouse.h"
 
 void menu()
 {
@@ -49,12 +40,10 @@ int main()
     int done = 0, redraw = 1;
     int x = 100, y = 100;
     int estado_do_jogo = MENU;
-    // sprites_t *sprite;
+    int click = 0;
 
     srand(clock());
     MATRIX_t **m = inicia_matrix(10);
-
-    // inicia_sprites(sprite);
 
     must_init(al_init(), "allegro");
 
@@ -79,6 +68,7 @@ int main()
 
     ALLEGRO_BITMAP* image = al_load_bitmap("image.jpg");
     must_init(image, "image");
+    inicia_sprites();
 
     must_init(al_install_mouse(), "mouse");
 
@@ -96,8 +86,6 @@ int main()
     unsigned char key[ALLEGRO_KEY_MAX];
     //zera array que contem todas as teclas que podem ser pressionadas
     memset(key, 0, sizeof(key));
-
-    // al_hide_mouse_cursor(disp);
 
     al_start_timer(timer);
     while(1)
@@ -135,6 +123,12 @@ int main()
                     key[i] &= KEY_SEEN;
                 break;
 
+            case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+                x = event.mouse.x;
+                y = event.mouse.y;
+                click = 1;
+                break;
+
             case ALLEGRO_EVENT_MOUSE_AXES:
                 x = event.mouse.x;
                 y = event.mouse.y;
@@ -157,6 +151,7 @@ int main()
 
         if(redraw && (al_is_event_queue_empty(queue)))
         {
+            if((mouse_joia(m, x, y))&&(click))
             if(estado_do_jogo == MENU)
                 menu();
             if(estado_do_jogo == JOGO)
@@ -174,8 +169,8 @@ int main()
         }
     }
 
-    destroi_sprites(sprite);
 
+    destroi_sprites();
     al_destroy_bitmap(image);
     al_destroy_font(font);
     al_destroy_display(disp);

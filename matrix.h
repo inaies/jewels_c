@@ -16,8 +16,13 @@ struct MATRIX
 {
     int x, y;
     JOIAS_t joias;
+    int sel;
 };
 typedef struct MATRIX MATRIX_t;
+
+int testa_linha(MATRIX_t **m, int i, int j);
+
+int testa_coluna(MATRIX_t **m, int i, int j);
 
 MATRIX_t** inicia_matrix(int tam);
 

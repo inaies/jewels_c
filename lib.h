@@ -23,11 +23,14 @@ struct sprites
 };
 typedef struct sprites sprites_t;
 
-// extern sprites_t sprites;
-void inicia_sprites(sprites_t *sprite);
+extern sprites_t sprite;
 
-void desenha_joia(ALLEGRO_BITMAP *image, int h, int w, int x, int y);
+void must_init(bool test, const char *description);
 
-void destroi_sprites(sprites_t *sprite);
+void inicia_sprites();
+
+void desenha_joia(ALLEGRO_BITMAP *image, int h, int w, int x, int y, int selected);
+
+void destroi_sprites();
 
 #endif

@@ -6,24 +6,45 @@
 // #include <allegro5/allegro_primitives.h>
 #include "lib.h"
 
-// sprites_t sprites;
-void inicia_sprites(sprites_t *sprite)
+sprites_t sprite;
+
+void must_init(bool test, const char *description)
 {
-    sprite->amarela = al_load_bitmap("joia_amarela.png");
-    must_init(sprite->amarela, "image");
+    if(test)    
+        return;
 
-    sprite->azul = al_load_bitmap("joia_azul.png");
-    must_init(sprite->azul, "image");
-
-    sprite->verde = al_load_bitmap("joia_verde.png");
-    must_init(sprite->verde, "image");
-
-    sprite->rosa = al_load_bitmap("joia_rosa.png");
-    must_init(sprite->rosa, "image");
+    printf("couldn't initialize %s \n", description);
+    exit(1);
 }
 
-void desenha_joia(ALLEGRO_BITMAP *imagem, int h, int w, int x, int y)
+
+void inicia_sprites() 
 {
+    sprite.amarela = al_load_bitmap("joia_amarela.png");
+    must_init(sprite.amarela, "image");
+
+    sprite.azul = al_load_bitmap("joia_azul.png");
+    must_init(sprite.azul, "image");
+
+    sprite.verde = al_load_bitmap("joia_verde.png");
+    must_init(sprite.verde, "image");
+
+    sprite.rosa = al_load_bitmap("joia_rosa.png");
+    must_init(sprite.rosa, "image");
+}
+
+void desenha_joia(ALLEGRO_BITMAP *imagem, int h, int w, int x, int y, int selected)
+{
+    if(selected)
+    al_draw_tinted_scaled_bitmap(imagem,
+    al_map_rgba_f(20, 10, 15, 28),
+    0, 0, 
+    al_get_bitmap_width(imagem), 
+    al_get_bitmap_height(imagem),
+    x, y, 
+    h, w, 
+    0);
+    else
     al_draw_scaled_bitmap(imagem,
     0, 0, 
     al_get_bitmap_width(imagem), 
@@ -34,10 +55,10 @@ void desenha_joia(ALLEGRO_BITMAP *imagem, int h, int w, int x, int y)
 }
 
 
-void destroi_sprites(sprites_t *sprite)
+void destroi_sprites()
 {
-    al_destroy_bitmap(sprite->amarela);
-    al_destroy_bitmap(sprite->azul);
-    al_destroy_bitmap(sprite->verde);
-    al_destroy_bitmap(sprite->rosa);
+    al_destroy_bitmap(sprite.amarela);
+    al_destroy_bitmap(sprite.azul);
+    al_destroy_bitmap(sprite.verde);
+    al_destroy_bitmap(sprite.rosa);
 }
