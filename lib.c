@@ -35,23 +35,33 @@ void inicia_sprites()
 
 void desenha_joia(ALLEGRO_BITMAP *imagem, int h, int w, int x, int y, int selected)
 {
-    if(selected)
-    al_draw_tinted_scaled_bitmap(imagem,
-    al_map_rgba_f(20, 10, 15, 28),
-    0, 0, 
-    al_get_bitmap_width(imagem), 
-    al_get_bitmap_height(imagem),
-    x, y, 
-    h, w, 
-    0);
-    else
-    al_draw_scaled_bitmap(imagem,
-    0, 0, 
-    al_get_bitmap_width(imagem), 
-    al_get_bitmap_height(imagem),
-    x, y, 
-    h, w, 
-    0);
+    if(selected == 0)
+        al_draw_scaled_bitmap(imagem,
+        0, 0, 
+        al_get_bitmap_width(imagem), 
+        al_get_bitmap_height(imagem),
+        x, y, 
+        h, w, 
+        0);
+    else if(selected == 1)
+        al_draw_tinted_scaled_bitmap(imagem,
+        al_map_rgba_f(500, 0, 500, 0),
+        0, 0, 
+        al_get_bitmap_width(imagem), 
+        al_get_bitmap_height(imagem),
+        x, y, 
+        h, w, 
+        0);
+    else if(selected == 2)
+        al_draw_tinted_scaled_bitmap(imagem,
+        al_map_rgba_f(500, 0, 0, 0),
+        0, 0, 
+        al_get_bitmap_width(imagem), 
+        al_get_bitmap_height(imagem),
+        x, y, 
+        h, w, 
+        0);
+
 }
 
 

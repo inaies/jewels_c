@@ -51,7 +51,7 @@ int main()
 
     must_init(al_install_keyboard(), "keyboard");
 
-    ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30.0); // timer do jogo
+    ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0); // timer do jogo
 
     must_init(timer, "timer");
 
@@ -149,9 +149,12 @@ int main()
         if(done)
             break;
 
+        mouse_joia(m, x, y, click);
+        if(click)
+            click = 0;
+
         if(redraw && (al_is_event_queue_empty(queue)))
         {
-            if((mouse_joia(m, x, y))&&(click))
             if(estado_do_jogo == MENU)
                 menu();
             if(estado_do_jogo == JOGO)
@@ -167,6 +170,7 @@ int main()
             al_clear_to_color(al_map_rgb(0, 0, 0));
             redraw = 0;
         }
+
     }
 
 

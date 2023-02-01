@@ -16,7 +16,7 @@ struct MATRIX
 {
     int x, y;
     JOIAS_t joias;
-    int sel;
+    int sel, clicked;
 };
 typedef struct MATRIX MATRIX_t;
 
