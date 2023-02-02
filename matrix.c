@@ -65,9 +65,9 @@ MATRIX_t** inicia_matrix(int tam)
 
 void desenha_matrix(MATRIX_t **m)
 {
-    for(int i = 0; i < 8; i++)
+    for(int i = 0; i < 10; i++)
     {
-        for(int j = 0; j < 8; j++)
+        for(int j = 0; j < 10; j++)
         {
             switch(m[i][j].joias)
             {

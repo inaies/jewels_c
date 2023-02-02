@@ -8,6 +8,7 @@
 #include "lib.h"
 #include "matrix.h"
 #include "mouse.h"
+#include "pontuacao.h"
 
 void menu()
 {
