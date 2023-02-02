@@ -13,6 +13,7 @@ void troca(MATRIX_t **m, int j1_x, int j1_y, int j2_x, int j2_y)
 
 int verifica_joia_selecionada(MATRIX_t **m, int joia_x, int joia_y)
 {
+    combinacao_t comb1, comb2;
     for (int i = 0; i < tam; i++)
     {
         for (int j = 0; j < tam; j++)
@@ -23,7 +24,10 @@ int verifica_joia_selecionada(MATRIX_t **m, int joia_x, int joia_y)
                 {
                     m[joia_x][joia_y].sel = 3;
                     troca(m, joia_x, joia_y, i, j);
-                    // busca_combinacao_troca(m);
+                    comb1 = busca_combinacao_troca(m, i, j);
+                    comb2 = busca_combinacao_troca(m, joia_x, joia_y);
+                    if(((comb1.final - comb1.inicio) >= 2)||((comb2.final - comb2.inicio) >= 2))
+                        gera_novas_joias(m, i, j, comb1, comb2);
                     return 0;
                 }
                 else 
@@ -64,11 +68,11 @@ int mouse_joia(MATRIX_t **m, int mouse_x, int mouse_y, int click)
                             m[i][j].sel = 2;
                     }
                 }
-                else if(m[i][j].sel != 2)
+                else if((m[i][j].sel != 2)&&(m[i][j].sel != 3))
                     m[i][j].sel = 1;
                 return 1;
             }
-            else if(m[i][j].sel != 2)
+            else if((m[i][j].sel != 2)&&(m[i][j].sel != 3))
                 m[i][j].sel = 0;
         }
     }

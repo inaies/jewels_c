@@ -2,18 +2,23 @@
 #include "time.h"
 #define tam 10
 
-void busca_combinacao_troca(MATRIX_t **m)
+combinacao_t busca_combinacao_troca(MATRIX_t **m, int joia_x, int joia_y)
 {
-    int joias_iguais;
-    for (int i = 0; i < tam; i++)
-    {
-        for (int j = 0; j < tam; j++)
-        {
-            joias_iguais = verifica_combinacao_linha(m, i, j);
-            if (joias_iguais >= 3)
-                gera_novas_joias(m, i, j, joias_iguais);
-        }
-    }
+    combinacao_t comb;
+    int i = joia_x, j = joia_y;
+    while((m[joia_x][(j-1)].joias == m[joia_x][joia_y].joias)&&(j >= 0))
+        j--;
+
+    comb.inicio = j;
+    comb.linha_col = 1;
+    comb.posicao = joia_x;
+
+    while((m[joia_x][(j+1)].joias == m[joia_x][joia_y].joias)&&(j < 10))
+        j++;
+
+    comb.final = j;
+
+    return (comb);
 }
 
 int verifica_combinacao_linha(MATRIX_t **m, int linha, int col_inicial)
@@ -22,19 +27,26 @@ int verifica_combinacao_linha(MATRIX_t **m, int linha, int col_inicial)
     int j = col_inicial;
     while (m[linha][j].joias == m[linha][j + 1].joias)
     {
-        printf("joia igual encontrada \n");
+        // printf("joia igual encontrada \n");
         j += 1;
         qntd_joias += 1;
     }
     return qntd_joias;
 }
 
-void gera_novas_joias(MATRIX_t **m, int linha, int col_inicial, int joias_iguais)
+void gera_novas_joias(MATRIX_t **m, int linha, int col_inicial, combinacao_t comb1, combinacao_t comb2)
 {
-    for (int j = col_inicial; j < joias_iguais; j++)
-    {
-        m[linha][j].joias = rand() % 4;
-        // while((testa_coluna(m, linha, j))||(testa_linha(m, linha, j)))
-        //     m[linha][j].joias = rand() % 4;
-    }
+    printf("inicio: %d - %d \n", comb1.inicio, comb1.final);
+
+        for (int j = comb1.inicio; j <= comb1.final; j++)
+        {
+            printf("%d \n", j);
+            m[comb1.posicao][j].sel = 3;
+        }
+
+        for (int j = comb2.inicio; j <= comb2.final; j++)
+        {
+            printf("%d \n", j);
+            m[comb2.posicao][j].sel = 3;
+        }
 }
