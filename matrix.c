@@ -38,7 +38,7 @@ MATRIX_t** inicia_matrix(int tam)
         exit(1);
     }
 
-    for (int i = 0; i < tam; i++)
+    for (int i = 0; i < 20; i++)
     {
         m[i] = malloc(sizeof(MATRIX_t) * tam);
         if(m[i] == NULL)
@@ -48,24 +48,31 @@ MATRIX_t** inicia_matrix(int tam)
         }
         for (int j = 0; j < tam; j++)
         {
-            m[i][j].x = 700/2 - dx;
-            m[i][j].y = dy;
+            if(i>=10)
+            {
+                m[i][j].x = 700/2 - dx;
+                m[i][j].y = dy;
+                dx -= 50;
+            }
             m[i][j].joias = rand() % 4;
             
             while((testa_coluna(m, i, j))||(testa_linha(m, i, j)))
                 m[i][j].joias = rand() % 4;
             
-            dx -= 50;
         }
-        dx = 200;
-        dy += 50;
+        
+        if(i>=10)
+        {
+            dx = 200;
+            dy += 50;
+        }
     }
     return m;
 }
 
 void desenha_matrix(MATRIX_t **m)
 {
-    for(int i = 0; i < 10; i++)
+    for(int i = 10; i < 20; i++)
     {
         for(int j = 0; j < 10; j++)
         {
