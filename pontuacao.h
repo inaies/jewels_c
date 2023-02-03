@@ -14,7 +14,7 @@ int verifica_combinacao_linha(MATRIX_t **m, int linha, int col_inicial);
 
 combinacao_t busca_combinacao_troca(MATRIX_t **m, int joia_x, int joia_y);
 
-void gera_novas_joias(MATRIX_t **m, int linha, int coluna, combinacao_t comb1);
+void gera_novas_joias(MATRIX_t **m, int linha1, combinacao_t comb1);
 
 void zera_vetor(int *vetor);
 

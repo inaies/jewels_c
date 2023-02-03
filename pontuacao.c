@@ -30,6 +30,25 @@ combinacao_t busca_combinacao_troca(MATRIX_t **m, int joia_x, int joia_y)
     if((comb.final - comb.inicio) < 2)
         zera_vetor(comb.linha);
 
+    while((m[(i-1)][joia_y].joias == m[joia_x][joia_y].joias)&&(i >= 10))
+    {
+        i--;
+        comb.coluna[i] = 1;
+    }
+
+    comb.inicio = i;
+    
+    while((m[(i+1)][joia_y].joias == m[joia_x][joia_y].joias)&&(j < 10))
+    {
+        i++;
+        comb.coluna[i] = 1;
+    }
+
+    comb.final = i;
+    if((comb.final - comb.inicio) < 2)
+        zera_vetor(comb.coluna);
+
+
     return (comb);
 }
 
@@ -48,20 +67,26 @@ int verifica_combinacao_linha(MATRIX_t **m, int linha, int col_inicial)
 
 void substitui_acima(MATRIX_t **m, int i, int j)
 {
-    if(i == -1)
+    if(i == 0)
         return;
-    m[i][j].joias = m[i][(j - 1)].joias;
-    substitui_acima(m, i, (j - 1));
+    m[i][j].joias = m[(i-1)][j].joias;
+    substitui_acima(m, (i-1), j);
 }
 
-void gera_novas_joias(MATRIX_t **m, int linha, int coluna, combinacao_t comb)
+void gera_novas_joias(MATRIX_t **m, int linha1, combinacao_t comb)
 {
+    for(int i = 10; i < 20; i++)
+    {
+        if(comb.coluna[i] == 1)
+            substitui_acima(m, linha1, i);
+    }
+
     for (int j = 0; j < 10; j++)
     {
         if (comb.linha[j] == 1)
-            m[linha][j].sel = 3;
-        // substitui_acima(m, linha, j);
+            substitui_acima(m, linha1, j);
     }
+
 }
 
 
