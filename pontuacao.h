@@ -5,18 +5,20 @@
 
 struct combinacao
 {
-    int inicio, final, linha_col, posicao;
-    int *linha, *coluna;
+    int i1_inicio, j1_inicio, i1_final, j1_final;
+    int i2_inicio, j2_inicio, i2_final, j2_final;
 };
 typedef struct combinacao combinacao_t;
 
 int verifica_combinacao_linha(MATRIX_t **m, int linha, int col_inicial);
 
-combinacao_t busca_combinacao_troca(MATRIX_t **m, int joia_x, int joia_y);
+int busca_combinacao_troca(MATRIX_t **m, int joia_x, int joia_y, int joia2_x, int joia2_y, combinacao_t *joia);
 
-void gera_novas_joias(MATRIX_t **m, int linha1, combinacao_t comb1);
+void gera_novas_joias(MATRIX_t **m, combinacao_t *joia);
 
-void zera_vetor(int *vetor);
+void gera_nova_linha(MATRIX_t **m);
+
+int busca_combinacao(MATRIX_t **m, combinacao_t *joia); 
 
 void substitui_acima(MATRIX_t **m, int i, int j);
 

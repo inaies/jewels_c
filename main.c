@@ -10,6 +10,8 @@
 #include "mouse.h"
 #include "pontuacao.h"
 
+#define display_size 700
+
 void menu()
 {
     ALLEGRO_FONT* font = al_create_builtin_font();//incializa fonte a ser usada
@@ -39,12 +41,27 @@ int main()
 {
 
     int done = 0, redraw = 1;
-    int x = 100, y = 100;
+    int x = 100, y = 100, nova_joia_x = 220, nova_joia_y = 0;
     int estado_do_jogo = MENU;
     int click = 0;
+    int animacao = 0;
 
     srand(clock());
     MATRIX_t **m = inicia_matrix(10);
+    // MATRIX_t *linha, *coluna;
+    combinacao_t *joia;
+
+    joia = malloc(sizeof(combinacao_t));
+    // linha = malloc(sizeof(int) * 10);
+    // coluna = malloc(sizeof(int) * 10);
+
+    // for (int i = 0; i < 10; i++)
+    //     linha[i].sel = 0;
+
+    // for (int i = 0; i < 10; i++)
+    //     coluna[i].sel = 0;
+    // zera_vetor(linha, 0);
+    // zera_vetor(coluna, 1);
 
     must_init(al_init(), "allegro");
 
@@ -59,7 +76,7 @@ int main()
     ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue(); // fila de eventos   
     must_init(queue, "queue");
 
-    ALLEGRO_DISPLAY* disp = al_create_display(700, 700); //inicializa as configuracoes do display
+    ALLEGRO_DISPLAY* disp = al_create_display(display_size, display_size); //inicializa as configuracoes do display
     must_init(disp, "display");
 
     ALLEGRO_FONT* font = al_create_builtin_font();//incializa fonte a ser usada
@@ -109,6 +126,7 @@ int main()
                 {
                     if(key[ALLEGRO_KEY_UP])
                         estado_do_jogo = FIM;
+
                 }
 
                 if(estado_do_jogo == FIM)
@@ -150,9 +168,16 @@ int main()
         if(done)
             break;
 
-        mouse_joia(m, x, y, click);
+        // if(!(animacao))
+        mouse_joia(m, x, y, click, joia);
         if(click)
             click = 0;
+
+        while(busca_combinacao(m, joia))
+        {
+            printf(" i inicio %d i final %d\nj inicio %d j final %d\n", joia->i1_inicio, joia->i1_final, joia->j1_inicio, joia->j1_final);
+            gera_novas_joias(m, joia);
+        }
 
         if(redraw && (al_is_event_queue_empty(queue)))
         {
@@ -171,9 +196,7 @@ int main()
             al_clear_to_color(al_map_rgb(0, 0, 0));
             redraw = 0;
         }
-
     }
-
 
     destroi_sprites();
     al_destroy_bitmap(image);

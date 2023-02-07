@@ -2,6 +2,7 @@
 #include "lib.h"
 #include <stdlib.h>
 #include <stdio.h>
+#define display_size 700
 
 extern sprites_t sprite;
 
@@ -27,11 +28,11 @@ int testa_coluna(MATRIX_t **m, int i, int j)
 
 MATRIX_t** inicia_matrix(int tam)
 {
-    int dx = 200, dy = 50;
+    int dx = 220, dy = 50;
 
     MATRIX_t **m;
 
-    m = malloc(sizeof(MATRIX_t) * tam);
+    m = malloc(sizeof(MATRIX_t) * 20);
     if(m == NULL)
     {
         perror("erro ao iniciar matrix");
@@ -50,7 +51,7 @@ MATRIX_t** inicia_matrix(int tam)
         {
             if(i>=10)
             {
-                m[i][j].x = 700/2 - dx;
+                m[i][j].x = display_size/2 - dx;
                 m[i][j].y = dy;
                 dx -= 50;
             }
@@ -63,7 +64,7 @@ MATRIX_t** inicia_matrix(int tam)
         
         if(i>=10)
         {
-            dx = 200;
+            dx = 220;
             dy += 50;
         }
     }

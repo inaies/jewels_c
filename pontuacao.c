@@ -2,54 +2,72 @@
 #include "time.h"
 #define tam 10
 
-combinacao_t busca_combinacao_troca(MATRIX_t **m, int joia_x, int joia_y)
+int busca_combinacao(MATRIX_t **m, combinacao_t *joia)
 {
-    combinacao_t comb;
-
-    comb.linha = malloc(sizeof(int) * 10);
-    comb.coluna = malloc(sizeof(int) * 10);
-
-    int i = joia_x, j = joia_y;
-    while((m[joia_x][(j-1)].joias == m[joia_x][joia_y].joias)&&(j >= 0))
+    for (int i = 10; i < 20; i++)
     {
-        j--;
-        comb.linha[j] = 1;
+        for (int j = 0; j < 10; j++)
+        {
+            if(busca_combinacao_troca(m, i, j, joia))
+                return 1;
+        }
+    }
+    return 0;
+}
+
+int busca_combinacao_troca(MATRIX_t **m, int joia_x, int joia_y, int joia2_x, int joia2_y, combinacao_t *joia)
+{
+    int i1 = joia_x, j1 = joia_y;
+    int i2 = joia2_x, j2 = joia2_y;
+
+    while ((j1 < 9) && (m[joia_x][(j1 + 1)].joias == m[joia_x][joia_y].joias))
+        j1++;
+
+    while((i < 19)&&(m[(i + 1)][joia_y].joias == m[joia_x][joia_y].joias))
+        i1++;
+
+    while ((j2 < 9) && (m[joia2_x][(j2 + 1)].joias == m[joia2_x][joia2_y].joias))
+        j2++;
+
+    while((i2 < 19)&&(m[(i2 + 1)][joia2_y].joias == m[joia2_x][joia2_y].joias))
+        i2++;
+
+    if(((i1 - joia_x) < 2) && ((j1 - joia_y) < 2) && ((i2 - joia2_x) < 2) && ((j2 - joia2_y) < 2))
+        return 0;
+
+    if((i1 - joia_x) >= 2)
+    {
+        joia->i1_inicio = joia_x;
+        joia->j1_inicio = joia_y;
+        joia->i1_final = i1;
+        joia->j1_final = joia_y;
     }
 
-    comb.inicio = j;
-    comb.linha_col = 1;
-    comb.posicao = joia_x;
-
-    while((m[joia_x][(j+1)].joias == m[joia_x][joia_y].joias)&&(j < 10))
+    if((j1 - joia_y) >= 2)
     {
-        j++;
-        comb.linha[j] = 1;
-    }
-    comb.final = j;
-
-    if((comb.final - comb.inicio) < 2)
-        zera_vetor(comb.linha);
-
-    while((m[(i-1)][joia_y].joias == m[joia_x][joia_y].joias)&&(i >= 10))
-    {
-        i--;
-        comb.coluna[i] = 1;
+        joia->i1_inicio = joia_x;
+        joia->j1_inicio = joia_y;
+        joia->i1_final = joia_x;
+        joia->j1_final = j1;
     }
 
-    comb.inicio = i;
-    
-    while((m[(i+1)][joia_y].joias == m[joia_x][joia_y].joias)&&(j < 10))
+    if((i2 - joia2_x) >= 2)
     {
-        i++;
-        comb.coluna[i] = 1;
+        joia->i2_inicio = joia2_x;
+        joia->j2_inicio = joia2_y;
+        joia->i2_final = i2;
+        joia->j2_final = joia2_y;
     }
 
-    comb.final = i;
-    if((comb.final - comb.inicio) < 2)
-        zera_vetor(comb.coluna);
+    if((j2 - joia2_y) >= 2)
+    {
+        joia->i2_inicio = joia2_x;
+        joia->j2_inicio = joia2_y;
+        joia->i2_final = joia2_x;
+        joia->j2_final = j2;
+    }
 
-
-    return (comb);
+    return 1;
 }
 
 int verifica_combinacao_linha(MATRIX_t **m, int linha, int col_inicial)
@@ -67,32 +85,42 @@ int verifica_combinacao_linha(MATRIX_t **m, int linha, int col_inicial)
 
 void substitui_acima(MATRIX_t **m, int i, int j)
 {
-    if(i == 0)
+    if(i < 9)
         return;
-    m[i][j].joias = m[(i-1)][j].joias;
-    substitui_acima(m, (i-1), j);
+
+    m[i][j].joias = m[(i - 1)][j].joias;
+    // gera_nova_linha(m);
+    substitui_acima(m, (i - 1), j);
 }
 
-void gera_novas_joias(MATRIX_t **m, int linha1, combinacao_t comb)
+void gera_nova_linha(MATRIX_t **m)
 {
-    for(int i = 10; i < 20; i++)
-    {
-        if(comb.coluna[i] == 1)
-            substitui_acima(m, linha1, i);
-    }
+    int i = 0;
+    // for (int i = 10; i < 20; i++)
+        for (int j = 0; j < 10; j++)
+        {
+            m[i][j].joias = rand() % 4;
 
-    for (int j = 0; j < 10; j++)
-    {
-        if (comb.linha[j] == 1)
-            substitui_acima(m, linha1, j);
-    }
-
+            while ((testa_coluna(m, i, j)) || (testa_linha(m, i, j)))
+                m[i][j].joias = rand() % 4;
+        }
 }
 
-
-void zera_vetor(int *vetor)
+void gera_novas_joias(MATRIX_t **m, combinacao_t *joia)
 {
-    for (int i = 0; i < 10; i++)
-        vetor[i] = 0;
+    //combinacao em linha
+    if(joia->i1_inicio == joia->i1_final)
+        for(int j = joia->j1_inicio; j < joia->j1_final; j++)
+        {
+            substitui_acima(m, joia->i1_inicio, j);
+        }
+
+    //combinacao em coluna
+    if(joia->j1_inicio == joia->j1_final)
+    for (int i = joia->i2_inicio; i < joia->i2_final; i++)
+    {
+            substitui_acima(m, i, joia->j1_inicio);
+    }
 }
+
 
