@@ -8,7 +8,7 @@ int busca_combinacao(MATRIX_t **m, combinacao_t *joia)
     {
         for (int j = 0; j < 10; j++)
         {
-            if(busca_combinacao_troca(m, i, j, joia))
+            if(busca_combinacao_troca(m, i, j, 0, 0, joia))
                 return 1;
         }
     }
@@ -23,7 +23,7 @@ int busca_combinacao_troca(MATRIX_t **m, int joia_x, int joia_y, int joia2_x, in
     while ((j1 < 9) && (m[joia_x][(j1 + 1)].joias == m[joia_x][joia_y].joias))
         j1++;
 
-    while((i < 19)&&(m[(i + 1)][joia_y].joias == m[joia_x][joia_y].joias))
+    while((i1 < 19)&&(m[(i1 + 1)][joia_y].joias == m[joia_x][joia_y].joias))
         i1++;
 
     while ((j2 < 9) && (m[joia2_x][(j2 + 1)].joias == m[joia2_x][joia2_y].joias))

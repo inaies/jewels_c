@@ -34,7 +34,8 @@ enum STATE
 {
     MENU,
     JOGO,
-    FIM
+    FIM,
+    TROCA
 };
 
 int main()
@@ -45,24 +46,16 @@ int main()
     int estado_do_jogo = MENU;
     int click = 0;
     int animacao = 0;
+    int segundo_click = 0;
 
     srand(clock());
     MATRIX_t **m = inicia_matrix(10);
-    // MATRIX_t *linha, *coluna;
+    MATRIX_t *sel1, *sel2;
     combinacao_t *joia;
 
+    sel1 = malloc(sizeof(MATRIX_t));
+    sel2 = malloc(sizeof(MATRIX_t));
     joia = malloc(sizeof(combinacao_t));
-    // linha = malloc(sizeof(int) * 10);
-    // coluna = malloc(sizeof(int) * 10);
-
-    // for (int i = 0; i < 10; i++)
-    //     linha[i].sel = 0;
-
-    // for (int i = 0; i < 10; i++)
-    //     coluna[i].sel = 0;
-    // zera_vetor(linha, 0);
-    // zera_vetor(coluna, 1);
-
     must_init(al_init(), "allegro");
 
     must_init(al_init_primitives_addon(), "primitives");    
@@ -121,7 +114,6 @@ int main()
                     if(key[ALLEGRO_KEY_SPACE])
                         estado_do_jogo = JOGO;
                 }
-
                 if(estado_do_jogo == JOGO)
                 {
                     if(key[ALLEGRO_KEY_UP])
@@ -134,7 +126,7 @@ int main()
                     if (key[ALLEGRO_KEY_DOWN])
                         estado_do_jogo = MENU;
                 }
-                
+
                 if(key[ALLEGRO_KEY_ESCAPE])
                     done = 1;
 
@@ -146,6 +138,10 @@ int main()
                 x = event.mouse.x;
                 y = event.mouse.y;
                 click = 1;
+                if((segundo_click)&&(mouse_joia(m, x, y, click, sel1, sel2)))
+                    estado_do_jogo = TROCA;
+                else
+                    segundo_click = click;
                 break;
 
             case ALLEGRO_EVENT_MOUSE_AXES:
@@ -163,21 +159,19 @@ int main()
             case ALLEGRO_EVENT_DISPLAY_CLOSE:
                 done = true;
                 break;
+            default:
+                estado_do_jogo = JOGO;
         }
             
         if(done)
             break;
 
-        // if(!(animacao))
-        mouse_joia(m, x, y, click, joia);
-        if(click)
-            click = 0;
 
-        while(busca_combinacao(m, joia))
-        {
-            printf(" i inicio %d i final %d\nj inicio %d j final %d\n", joia->i1_inicio, joia->i1_final, joia->j1_inicio, joia->j1_final);
-            gera_novas_joias(m, joia);
-        }
+        // while(busca_combinacao(m, joia))
+        // {
+        //     printf(" i inicio %d i final %d\nj inicio %d j final %d\n", joia->i1_inicio, joia->i1_final, joia->j1_inicio, joia->j1_final);
+        //     gera_novas_joias(m, joia);
+        // }
 
         if(redraw && (al_is_event_queue_empty(queue)))
         {
@@ -185,6 +179,19 @@ int main()
                 menu();
             if(estado_do_jogo == JOGO)
             {
+                mouse_joia(m, x, y, click, sel1, sel2);
+                desenha_matrix(m);
+            }
+            if(estado_do_jogo == TROCA)
+            {
+                troca(m, sel1, sel2);
+                if(busca_combinacao_troca(m, sel1->x, sel1->y, sel2->x, sel2->y, joia))
+                    troca(m, sel1, sel2);
+                segundo_click = 0;
+                // estado_do_jogo = JOGO;
+                printf("i %d, j %d \n i %d j %d \n", sel1->x, sel1->y, sel2->x, sel2->y);
+                // while(busca_combinacao(m, joia))
+                //     gera_novas_joias(m, joia);
                 desenha_matrix(m);
             }
             if(estado_do_jogo == FIM)
@@ -196,6 +203,10 @@ int main()
             al_clear_to_color(al_map_rgb(0, 0, 0));
             redraw = 0;
         }
+
+        if(click)
+            click = 0;
+        
     }
 
     destroi_sprites();
