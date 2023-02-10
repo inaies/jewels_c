@@ -4,12 +4,18 @@
 void troca(MATRIX_t **m, MATRIX_t *sel1, MATRIX_t *sel2)
 {
     int joia_aux;
-    int j1_x = sel1->x, j1_y = sel1->y, j2_x = sel2->x, j2_y = sel2->y;
-    joia_aux = m[j1_x][j1_y].joias;
-    m[j1_x][j1_y].joias = m[j2_x][j2_y].joias;
-    m[j2_x][j2_y].joias = joia_aux;
-    m[j1_x][j1_y].sel = 0;
-    m[j2_x][j2_y].sel = 0;
+    int j1_x = sel1->i, j1_y = sel1->j, j2_x = sel2->i, j2_y = sel2->j;
+    // joia_aux = m[j1_x][j1_y].joias;
+    // m[j1_x][j1_y].joias = m[j2_x][j2_y].joias;
+    // m[j2_x][j2_y].joias = joia_aux;
+    // m[j1_x][j1_y].sel = 0;
+    // m[j2_x][j2_y].sel = 0;
+    if(sel1->i == sel2->i)
+        while(m[sel1->i][sel1->j].px != sel2->px)
+        {
+            m[j1_x][j1_y].px += 2;
+        }
+
 }
 
 int verifica_joia_selecionada(MATRIX_t **m, int joia_x, int joia_y, MATRIX_t *sel2)
@@ -24,10 +30,8 @@ int verifica_joia_selecionada(MATRIX_t **m, int joia_x, int joia_y, MATRIX_t *se
                 if(eh_joia_vizinha(joia_x, joia_y, i, j))
                 { 
                     m[joia_x][joia_y].sel = 3;
-                    sel2->x = i;
-                    sel2->y = j;
-                    printf("%d %d \n", i, j);
-                    printf("%d %d \n", sel2->x, sel2->y);
+                    sel2->i = i;
+                    sel2->j = j;
                     return 1;
                 }
                 else
@@ -57,7 +61,7 @@ int mouse_joia(MATRIX_t **m, int mouse_x, int mouse_y, int click, MATRIX_t *sel1
     {
         for (int j = 0; j < tam; j++)
         {
-            if(((mouse_x >= m[i][j].x)&&(mouse_x <= (m[i][j].x+40)))&&(mouse_y >= m[i][j].y)&&(mouse_y <= m[i][j].y+40))
+            if(((mouse_x >= m[i][j].px)&&(mouse_x <= (m[i][j].px+40)))&&(mouse_y >= m[i][j].py)&&(mouse_y <= m[i][j].py+40))
             {
                 if(click == 1)
                 {
@@ -65,11 +69,14 @@ int mouse_joia(MATRIX_t **m, int mouse_x, int mouse_y, int click, MATRIX_t *sel1
                         m[i][j].sel = 0;
                     else
                     {
-                        if(verifica_joia_selecionada(m, i, j, sel2))
-                        {
+                        if(!(verifica_joia_selecionada(m, i, j, sel2)))
                             m[i][j].sel = 2;
-                            sel1->x = i;
-                            sel1->y = j;
+                        else
+                        {
+                            sel1->i = i;
+                            sel1->j = j;
+                            sel1->px = m[i][j].px;
+                            sel1->py = m[i][j].py;
                             return 1;
                         }
                     }

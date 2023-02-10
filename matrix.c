@@ -51,8 +51,8 @@ MATRIX_t** inicia_matrix(int tam)
         {
             if(i>=10)
             {
-                m[i][j].x = display_size/2 - dx;
-                m[i][j].y = dy;
+                m[i][j].px = display_size/2 - dx;
+                m[i][j].py = dy;
                 dx -= 50;
             }
             m[i][j].joias = rand() % 4;
@@ -80,16 +80,16 @@ void desenha_matrix(MATRIX_t **m)
             switch(m[i][j].joias)
             {
                 case(0):
-                    desenha_joia(sprite.amarela, 50, 50, m[i][j].x, m[i][j].y, m[i][j].sel);
+                    desenha_joia(sprite.amarela, 50, 50, m[i][j].px, m[i][j].py, m[i][j].sel);
                     break;
                 case(1):
-                    desenha_joia(sprite.azul, 50, 50, m[i][j].x, m[i][j].y, m[i][j].sel);
+                    desenha_joia(sprite.azul, 50, 50, m[i][j].px, m[i][j].py, m[i][j].sel);
                     break;
                 case(2):
-                    desenha_joia(sprite.verde, 50, 50, m[i][j].x, m[i][j].y, m[i][j].sel);
+                    desenha_joia(sprite.verde, 50, 50, m[i][j].px, m[i][j].py, m[i][j].sel);
                     break;
                 case(3):
-                    desenha_joia(sprite.rosa, 50, 50, m[i][j].x, m[i][j].y, m[i][j].sel);
+                    desenha_joia(sprite.rosa, 50, 50, m[i][j].px, m[i][j].py, m[i][j].sel);
                     break;
             }
         }

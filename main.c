@@ -138,10 +138,13 @@ int main()
                 x = event.mouse.x;
                 y = event.mouse.y;
                 click = 1;
-                if((segundo_click)&&(mouse_joia(m, x, y, click, sel1, sel2)))
+                if(mouse_joia(m, x, y, click, sel1, sel2))
+                {
                     estado_do_jogo = TROCA;
-                else
-                    segundo_click = click;
+                    printf("i %d, j %d \n i %d j %d \n", sel1->px, sel1->py, sel2->px, sel2->py);
+                }
+                // else
+                //     segundo_click = click;
                 break;
 
             case ALLEGRO_EVENT_MOUSE_AXES:
@@ -166,13 +169,6 @@ int main()
         if(done)
             break;
 
-
-        // while(busca_combinacao(m, joia))
-        // {
-        //     printf(" i inicio %d i final %d\nj inicio %d j final %d\n", joia->i1_inicio, joia->i1_final, joia->j1_inicio, joia->j1_final);
-        //     gera_novas_joias(m, joia);
-        // }
-
         if(redraw && (al_is_event_queue_empty(queue)))
         {
             if(estado_do_jogo == MENU)
@@ -182,17 +178,22 @@ int main()
                 mouse_joia(m, x, y, click, sel1, sel2);
                 desenha_matrix(m);
             }
+
             if(estado_do_jogo == TROCA)
             {
                 troca(m, sel1, sel2);
-                if(busca_combinacao_troca(m, sel1->x, sel1->y, sel2->x, sel2->y, joia))
+
+                if(!(busca_combinacao_troca(m, sel1->i, sel1->j, sel2->i, sel2->j, joia)))
+                {
+                    printf("combinacao nao realizada \n");
                     troca(m, sel1, sel2);
+                }
                 segundo_click = 0;
-                // estado_do_jogo = JOGO;
-                printf("i %d, j %d \n i %d j %d \n", sel1->x, sel1->y, sel2->x, sel2->y);
+                printf("i %d, j %d \n i %d j %d \n", sel1->i, sel1->j, sel2->i, sel2->j);
                 // while(busca_combinacao(m, joia))
                 //     gera_novas_joias(m, joia);
                 desenha_matrix(m);
+                estado_do_jogo = TROCA;
             }
             if(estado_do_jogo == FIM)
             {

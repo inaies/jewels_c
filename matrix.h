@@ -14,7 +14,8 @@ typedef enum JOIAS JOIAS_t;
 
 struct MATRIX
 {
-    int x, y;
+    int px, py;
+    int i, j;
     JOIAS_t joias;
     int sel, clicked;
 };
