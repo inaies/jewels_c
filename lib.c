@@ -73,7 +73,7 @@ void desenha_joia(ALLEGRO_BITMAP *imagem, int h, int w, int x, int y, int select
         al_get_bitmap_height(imagem),
         x, y, 
         h, w, 
-        0);
+        0);        
 
 }
 

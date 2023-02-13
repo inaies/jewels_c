@@ -3,8 +3,8 @@ LIBS=-lm -lallegro_ttf -lallegro_image -lallegro_primitives -lallegro_font -lall
 
 all: jewels
 
-jewels: main.o lib.o matrix.o mouse.o pontuacao.o
-	gcc -o jewels main.o lib.o matrix.o mouse.o pontuacao.o $(CFLAGS) $(LIBS)
+jewels: main.o lib.o matrix.o mouse.o pontuacao.o animacao.o
+	gcc -o jewels main.o lib.o matrix.o mouse.o pontuacao.o animacao.o $(CFLAGS) $(LIBS)
 
 main.o: main.c
 	gcc -c main.c $(CFLAGS)
@@ -20,6 +20,9 @@ mouse.o: mouse.c mouse.h
 
 pontuacao.o: pontuacao.c pontuacao.h
 	gcc -c pontuacao.c $(CFLAGS)
+
+animacao.o: animacao.c animacao.h
+	gcc -c animacao.c $(CFLAGS)
 
 clean:
 	rm -f *~ 

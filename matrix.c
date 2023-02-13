@@ -29,6 +29,7 @@ int testa_coluna(MATRIX_t **m, int i, int j)
 MATRIX_t** inicia_matrix(int tam)
 {
     int dx = 220, dy = 50;
+    int dy1 = 0;
 
     MATRIX_t **m;
 
@@ -53,27 +54,36 @@ MATRIX_t** inicia_matrix(int tam)
             {
                 m[i][j].px = display_size/2 - dx;
                 m[i][j].py = dy;
-                dx -= 50;
             }
-            m[i][j].joias = rand() % 4;
-            
-            while((testa_coluna(m, i, j))||(testa_linha(m, i, j)))
+            else
+            {
+                m[i][j].px = display_size/2 - dx;
+                m[i][j].py = dy1;
+                m[i][j].sel = 3;
+            }
+                dx -= 50;
+
+                m[i][j].i = i;
+                m[i][j].j = j;
+                m[i][j].joias = rand() % 4;
+
+                while ((testa_coluna(m, i, j)) || (testa_linha(m, i, j)))
                 m[i][j].joias = rand() % 4;
             
         }
         
-        if(i>=10)
-        {
             dx = 220;
+        if(i>=10)
             dy += 50;
-        }
+        else
+            dy1 -= 50;
     }
     return m;
 }
 
 void desenha_matrix(MATRIX_t **m)
 {
-    for(int i = 10; i < 20; i++)
+    for(int i = 0; i < 20; i++)
     {
         for(int j = 0; j < 10; j++)
         {

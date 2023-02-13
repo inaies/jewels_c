@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "stdio.h": "c",
-        "mouse.h": "c"
+        "mouse.h": "c",
+        "matrix.h": "c"
     }
 }
