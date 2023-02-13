@@ -253,8 +253,16 @@ int main()
                     if(animacao_combinacao_coluna(m, m_aux, joia))
                     {
                         troca_combinacao_coluna(m, m_aux, joia);
+                        for (int i = 10; i < 20; i++)
+                        {
+                            for (int j = 0; j < 10; j++)
+                            {
+                                printf("na matrix %d %d - na struct %d %d ", m[i][j].i, m[i][j].j, i, j);
+                                printf("px %d py %d joia %d \n", m[i][j].px, m[i][j].py, m[i][j].joias);
+                            }
+                        }
+                        // gera_novas_joias(m, m_aux, joia);
                         zera_combinacao(joia);
-                        gera_novas_joias(m, joia);
                         estado_do_jogo = JOGO;
                     }
                 }

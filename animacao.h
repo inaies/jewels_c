@@ -18,6 +18,6 @@ void troca_combinacao_linha(MATRIX_t **m, MATRIX_t **aux, combinacao_t *joia);
 
 void troca_combinacao_coluna(MATRIX_t **m, MATRIX_t **m_aux, combinacao_t *joia);
 
-void gera_novas_joias(MATRIX_t **m, combinacao_t *joia);
+void gera_novas_joias(MATRIX_t **m, MATRIX_t **m_aux, combinacao_t *joia);
 
 #endif

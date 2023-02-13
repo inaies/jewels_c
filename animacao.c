@@ -93,7 +93,7 @@ int animacao_combinacao_linha(MATRIX_t **m, MATRIX_t **m_aux, combinacao_t *joia
 
     for (int j = joia->j1_inicio; j <= joia->j1_final; j++)
     {
-        for (int i = (joia->i1_inicio - 1); i >= 9; i--)
+        for (int i = (joia->i1_inicio - 1); i > 0; i--)
         {
             if (m[i][joia->j1_final].py >= aux)
                 return 1;
@@ -104,15 +104,14 @@ int animacao_combinacao_linha(MATRIX_t **m, MATRIX_t **m_aux, combinacao_t *joia
     return 0;
 }
 
-void gera_novas_joias(MATRIX_t **m, combinacao_t *joia)
+void gera_novas_joias(MATRIX_t **m, MATRIX_t **m_aux, combinacao_t *joia)
 {
     int tam_combinacao = joia->i1_final - joia->i1_inicio + 1;
     for (int i = 0; i < tam_combinacao; i++)
     {
-        m[i][joia->i1_inicio].px = 130;
-        m[i][joia->j1_inicio].py = 50;
         m[i][joia->j1_inicio].sel = 3;
-
+        m[i][joia->j1_inicio].px = m_aux[i][joia->j1_inicio].px;
+        m[i][joia->j1_inicio].py = m_aux[i][joia->j1_inicio].py;
         m[i][joia->j1_inicio].joias = rand() % 4;
 
         while ((testa_coluna(m, i, joia->j1_inicio)) || (testa_linha(m, i, joia->j1_inicio)))
@@ -144,17 +143,18 @@ void troca_combinacao_coluna(MATRIX_t **m, MATRIX_t **m_aux, combinacao_t *joia)
 {
     int tam_combinacao = joia->i1_final - joia->i1_inicio + 1;
     printf("%d \n", tam_combinacao);
+    m = m_aux;
 
     for (int i = joia->i1_final; i >= 0; i--)
     {
-        if(i >= 10)
+        if(i > tam_combinacao)
         {
-            m[i][joia->j1_inicio].joias = m[(i - tam_combinacao)][joia->j1_inicio].joias;
+            m[i][joia->j1_inicio].joias = m_aux[(i - tam_combinacao)][joia->j1_inicio].joias;
             m[i][joia->j1_inicio].px = m_aux[i][joia->j1_inicio].px;
             m[i][joia->j1_inicio].py = m_aux[i][joia->j1_inicio].py;
             m[i][joia->j1_inicio].sel = 0;
         }
-        else
+        if(i<10)
             m[i][joia->j1_inicio].sel = 3;
     }
 }
