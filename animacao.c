@@ -1,5 +1,6 @@
 #include "animacao.h"
 #include "matrix.h"
+#define display_size 700
 
 int troca_animacao(MATRIX_t **m, MATRIX_t *sel1, MATRIX_t *sel2)
 {
@@ -11,8 +12,8 @@ int troca_animacao(MATRIX_t **m, MATRIX_t *sel1, MATRIX_t *sel2)
     m[j1_x][j1_y].sel = 0;
     m[j2_x][j2_y].sel = 0;
 
-    printf(" j1 px %d j2 px %d \n", m[j1_x][j1_y].px, m[j2_x][j2_y].px);
-    printf(" j1 py %d j2 py %d \n", m[j1_x][j1_y].py, m[j2_x][j2_y].py);
+    //printf(" j1 px %d j2 px %d \n", m[j1_x][j1_y].px, m[j2_x][j2_y].px);
+    //printf(" j1 py %d j2 py %d \n", m[j1_x][j1_y].py, m[j2_x][j2_y].py);
 
     if(sel1->i == sel2->i)
     {
@@ -81,126 +82,131 @@ void troca(MATRIX_t **m, MATRIX_t *sel1, MATRIX_t *sel2)
     
 }
 
-int animacao_combinacao_linha(MATRIX_t **m, MATRIX_t **m_aux, combinacao_t *joia)
+int animacao_combinacao_linha(MATRIX_t **m, combinacao_t *joia)
 {
     int aux = m[joia->i1_inicio][joia->j1_inicio].py;
-    m_aux = m;
 
     for (int j = joia->j1_inicio; j <= joia->j1_final; j++)
-    {
         m[joia->i1_inicio][j].sel = 3;
-    }
 
-    for (int j = joia->j1_inicio; j <= joia->j1_final; j++)
-    {
-        for (int i = (joia->i1_inicio - 1); i > 0; i--)
+    // if((joia->i2_inicio == joia->i2_final)&&(joia->i2_inicio != -1))
+    // {
+    //     for(int j = joia->j2_inicio; j <= joia->j2_final; j++)
+    //         m[joia->i2_inicio][j].sel = 3;
+
+    //     if((joia->j1_inicio == joia->j2_inicio)&&(joia->j1_final == joia->j2_final))
+    //     {
+    //         for (int j = joia->j2_inicio; j <= joia->j2_final; j++)
+    //         {
+    //             for (int i = (joia->i1_inicio - 2); i > 0; i--)
+    //             {
+    //                 if (m[i][joia->j1_final].py >= aux)
+    //                     return 1;
+    //                 m[i][j].sel = 0;
+    //                 m[i][j].py += 5;
+    //             }
+    //         }
+    //     }
+    // }
+    // else
+    // {
+        for (int j = joia->j1_inicio; j <= joia->j1_final; j++)
         {
-            if (m[i][joia->j1_final].py >= aux)
-                return 1;
-            m[i][j].sel = 0;
-            m[i][j].py += 5;
+            for (int i = (joia->i1_inicio - 1); i > 0; i--)
+            {
+                if (m[i][joia->j1_final].py >= aux)
+                    return 1;
+                if (i == 9)
+                    m[i][j].sel = 0;
+                m[i][j].py += 2;
+            }
         }
-    }
+    // }
     return 0;
 }
 
-void gera_novas_joias(MATRIX_t **m, MATRIX_t **m_aux, combinacao_t *joia)
+void gera_novas_joias(MATRIX_t **m, combinacao_t *joia)
 {
+    int j = joia->j1_inicio;
     int tam_combinacao = joia->i1_final - joia->i1_inicio + 1;
     for (int i = 0; i < tam_combinacao; i++)
     {
-        m[i][joia->j1_inicio].sel = 3;
-        m[i][joia->j1_inicio].px = m_aux[i][joia->j1_inicio].px;
-        m[i][joia->j1_inicio].py = m_aux[i][joia->j1_inicio].py;
-        m[i][joia->j1_inicio].joias = rand() % 4;
+        m[i][j].sel = 3;
+        m[i][j].joias = rand() % 4;
 
-        while ((testa_coluna(m, i, joia->j1_inicio)) || (testa_linha(m, i, joia->j1_inicio)))
-            m[i][joia->j1_inicio].joias = rand() % 4;
+        while ((testa_coluna(m, i, j)) || (testa_linha(m, i, j)))
+            m[i][j].joias = rand() % 4;
     }
-
 }
 
-int animacao_combinacao_coluna(MATRIX_t **m, MATRIX_t **m_aux, combinacao_t *joia)
+int animacao_combinacao_coluna(MATRIX_t **m, combinacao_t *joia)
 {
-    int aux = m[joia->i1_final][joia->j1_inicio].py;
-    m_aux = m;
+    int j = joia->j1_inicio;
+
+    int aux = m[joia->i1_final][j].py;
 
     for (int i = joia->i1_inicio; i <= joia->i1_final; i++)
-        m[i][joia->j1_inicio].sel = 3;
+        m[i][j].sel = 3;
 
-    for (int i = (joia->i1_inicio-1); i >= 0; i--)
+    int tam_combinacao = joia->i1_final - joia->i1_inicio + 1;
+    for (int i = (joia->i1_inicio-1); i >= 10 - tam_combinacao; i--)
     {
-        if(m[i][joia->j1_inicio].py >= aux)
+        if(m[i][j].py > aux)
             return 1;
-        m[i][joia->j1_inicio].sel = 0;
-        m[i][joia->j1_inicio].py += 5;
+        m[i][j].sel = 0;
+        m[i][j].py += 2;
     }
 
     return 0;
 }
 
-void troca_combinacao_coluna(MATRIX_t **m, MATRIX_t **m_aux, combinacao_t *joia)
+void arruma_px_py_matriz(MATRIX_t **m) {
+    for (int i = 0; i < 20; i++) {
+        for (int j = 0; j < 10; j++) {
+            m[i][j].px = 130 + j*50;
+            m[i][j].py = -450 + i*50;
+            m[i][j].sel = i >= 10 ? 0 : 3;
+        }
+    }
+}
+
+void troca_combinacao_coluna(MATRIX_t **m, combinacao_t *joia)
 {
     int tam_combinacao = joia->i1_final - joia->i1_inicio + 1;
-    printf("%d \n", tam_combinacao);
-    m = m_aux;
-
+    int j = joia->j1_inicio;
     for (int i = joia->i1_final; i >= 0; i--)
     {
         if(i > tam_combinacao)
         {
-            m[i][joia->j1_inicio].joias = m_aux[(i - tam_combinacao)][joia->j1_inicio].joias;
-            m[i][joia->j1_inicio].px = m_aux[i][joia->j1_inicio].px;
-            m[i][joia->j1_inicio].py = m_aux[i][joia->j1_inicio].py;
-            m[i][joia->j1_inicio].sel = 0;
+            m[i][j].joias = m[(i - tam_combinacao)][j].joias;
         }
-        if(i<10)
-            m[i][joia->j1_inicio].sel = 3;
     }
+    arruma_px_py_matriz(m);
 }
 
 void zera_combinacao(combinacao_t *joia)
 {
-    joia->i1_inicio = 0;
-    joia->i1_final = 0;
-    joia->j1_inicio = 0;
-    joia->j1_final = 0;
-    joia->i2_inicio = 0;
-    joia->i2_final = 0;
-    joia->j2_inicio = 0;
-    joia->j2_final = 0;
+    joia->i1_inicio = -1;
+    joia->i1_final = -1;
+    joia->j1_inicio = -1;
+    joia->j1_final = -1;
+    joia->i2_inicio = -1;
+    joia->i2_final = -1;
+    joia->j2_inicio = -1;
+    joia->j2_final = -1;
 }
 
-void troca_combinacao_linha(MATRIX_t **m, MATRIX_t **m_aux, combinacao_t *joia)
+void troca_combinacao_linha(MATRIX_t **m, combinacao_t *joia, int qntd_comb)
 {
+    // m = m_aux;
 
     for (int j = joia->j1_inicio; j <= joia->j1_final; j++)
     {
-        for (int i = joia->i1_inicio; i >= 0; i--)
+        for (int i = joia->i1_inicio; i >= 1; i--)
         {
-            if(i > 0)
-            {
-                m[i][j].joias = m[(i - 1)][j].joias;
-                m[i][j].px = m_aux[i][j].px;
-                m[i][j].py = m_aux[i][j].py;
-                if(i>=10)
-                    m[i][j].sel = 0;
-                else
-                    m[i][j].sel = 3;
-            }
-            if(i == 0)
-            {
-                m[i][j].px = 130;
-                m[i][j].py = 50;
-                m[i][j].sel = 3;
-
-                m[i][j].joias = rand() % 4;
-
-                while ((testa_coluna(m, i, j)) || (testa_linha(m, i, j)))
-                m[i][j].joias = rand() % 4;
-            }
+            m[i][j].joias = m[(i - 1)][j].joias;
         }
-        m[joia->i1_inicio][j].sel = 0;
     }
 
+    arruma_px_py_matriz(m);
 }

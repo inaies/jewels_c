@@ -23,8 +23,6 @@ void menu()
 
 void jogo_principal(int x, int y, MATRIX_t **m)
 {
-    int x_piece = 100, y_piece = 100;
-    int piece;
 
     ALLEGRO_FONT* font = al_create_builtin_font();//incializa fonte a ser usada
     must_init(font, "font");
@@ -45,15 +43,12 @@ int main()
 {
 
     int done = 0, redraw = 1;
-    int x = 100, y = 100, nova_joia_x = 220, nova_joia_y = 0;
+    int x = 100, y = 100;
     int estado_do_jogo = MENU;
     int click = 0;
-    int animacao = 0;
-    int segundo_click = 0;
 
     srand(clock());
     MATRIX_t **m = inicia_matrix(10);
-    MATRIX_t **m_aux = inicia_matrix(10);
     MATRIX_t *sel1, *sel2;
     combinacao_t *joia;
 
@@ -188,9 +183,7 @@ int main()
             {
                 if(troca_animacao(m, sel1, sel2))
                 {    
-                    printf("porrraa \n");
                     troca(m, sel1, sel2);
-                    printf("j1 i %d j %d \n j2 i %d j %d \n", sel1->i, sel1->j, sel2->i, sel2->j);
                     if (!(busca_combinacao(m, joia, 0)))
                     {
                         printf("combinacao nao realizada \n");
@@ -201,32 +194,19 @@ int main()
                     {
                         busca_combinacao(m, joia, 1);
                         estado_do_jogo = GERA_JOIAS;
-                        printf("inicio %d %d final %d %d \n", joia->i1_inicio, joia->j1_inicio, joia->i1_final, joia->j1_final);
-                        printf("inicio %d %d final %d %d \n", joia->i2_inicio, joia->j2_inicio, joia->i2_final, joia->j2_final);
                     }
                 }
                 else
                     estado_do_jogo = TROCA;
-                // {
-                // }
-                // while(busca_combinacao(m, joia))
-                //     gera_novas_joias(m, joia);
+
                 desenha_matrix(m);
             }
+
             if(estado_do_jogo == REFAZ_TROCA)
             {
                 if (troca_animacao(m, sel1, sel2))
                 {
                     troca(m, sel1, sel2);
-                    for (int i = 10; i < 20; i++)
-                    {
-                        for (int j = 0; j < 10; j++)
-                        {
-                            printf("na matrix %d %d - na struct %d %d ", m[i][j].i, m[i][j].j, i, j);
-                            printf("px %d py %d joia %d \n", m[i][j].px, m[i][j].py, m[i][j].joias);
-                        }
-                    }
-
                     estado_do_jogo = JOGO;
                 }
                 else
@@ -234,38 +214,50 @@ int main()
 
                 desenha_matrix(m);
             }
+            
             if(estado_do_jogo == GERA_JOIAS)
             {
-                if (joia->i1_inicio == joia->i1_final)
+                if ((joia->i1_inicio == joia->i1_final)&&(joia->i1_inicio != -1))
                 {
-                    printf("combinacao em linha \n");
-                    if (animacao_combinacao_linha(m, m_aux, joia))
+                    // printf("combinacao em linha \n");
+                    if (animacao_combinacao_linha(m, joia))
                     {
-                        troca_combinacao_linha(m, m_aux, joia);
+                        //verifica se houve duas combinacoes de linha uma sobre a outra
+                        // if((joia->i2_inicio == joia->i2_final)&&(joia->i2_inicio != -1))
+                        //     troca_combinacao_linha(m, joia, 2);
+                        // else
+                            troca_combinacao_linha(m, joia, 1);
+                        gera_novas_joias(m, joia);
+                        // printf("aaaa porraaa \n");
+                        zera_combinacao(joia);
+                        estado_do_jogo == JOGO;
+                        sleep(0.5);
+                    }   
+                    else
+                        estado_do_jogo = GERA_JOIAS;
+                }
+                if((joia->j1_inicio == joia->j1_final)&&(joia->j1_inicio != -1))
+                {
+                    if(animacao_combinacao_coluna(m, joia))
+                    {
+                        troca_combinacao_coluna(m, joia);
+                        printf("aaaa porraaa \n");
+                        gera_novas_joias(m, joia);
                         zera_combinacao(joia);
                         estado_do_jogo = JOGO;
+                        sleep(0.5);
                     }
                     else
                         estado_do_jogo = GERA_JOIAS;
                 }
-                if(joia->j1_inicio == joia->j1_final)
+                if((estado_do_jogo == JOGO)&&(busca_combinacao(m, joia, 0)))
                 {
-                    if(animacao_combinacao_coluna(m, m_aux, joia))
-                    {
-                        troca_combinacao_coluna(m, m_aux, joia);
-                        for (int i = 10; i < 20; i++)
-                        {
-                            for (int j = 0; j < 10; j++)
-                            {
-                                printf("na matrix %d %d - na struct %d %d ", m[i][j].i, m[i][j].j, i, j);
-                                printf("px %d py %d joia %d \n", m[i][j].px, m[i][j].py, m[i][j].joias);
-                            }
-                        }
-                        // gera_novas_joias(m, m_aux, joia);
-                        zera_combinacao(joia);
-                        estado_do_jogo = JOGO;
-                    }
+                    printf("ainda ha combinacoes \n");
+                    // busca_combinacao(m, joia, 1);
+                    estado_do_jogo = GERA_JOIAS;
                 }
+                if((!(busca_combinacao(m, joia, 0)))&&(estado_do_jogo = JOGO))
+                    estado_do_jogo = JOGO;                   
                 desenha_matrix(m);
             }
 

@@ -28,7 +28,7 @@ int testa_coluna(MATRIX_t **m, int i, int j)
 
 MATRIX_t** inicia_matrix(int tam)
 {
-    int dx = 220, dy = 50;
+    int dx = 220;
     int dy1 = 0;
 
     MATRIX_t **m;
@@ -53,12 +53,12 @@ MATRIX_t** inicia_matrix(int tam)
             if(i>=10)
             {
                 m[i][j].px = display_size/2 - dx;
-                m[i][j].py = dy;
+                m[i][j].py = -450 + 50*i;
             }
             else
             {
                 m[i][j].px = display_size/2 - dx;
-                m[i][j].py = dy1;
+                m[i][j].py = -450 + 50*i;
                 m[i][j].sel = 3;
             }
                 dx -= 50;
@@ -71,12 +71,7 @@ MATRIX_t** inicia_matrix(int tam)
                 m[i][j].joias = rand() % 4;
             
         }
-        
             dx = 220;
-        if(i>=10)
-            dy += 50;
-        else
-            dy1 -= 50;
     }
     return m;
 }
