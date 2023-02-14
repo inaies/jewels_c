@@ -184,15 +184,14 @@ int main()
                 if(troca_animacao(m, sel1, sel2))
                 {    
                     troca(m, sel1, sel2);
-                    if (!(busca_combinacao(m, joia, 0)))
+                    if (!(busca_combinacao(m, joia, 0, sel1, sel2)))
                     {
-                        printf("combinacao nao realizada \n");
-                        sleep(0.7);
+                        sleep(0.8);
                         estado_do_jogo = REFAZ_TROCA;
                     }
                     else
                     {
-                        busca_combinacao(m, joia, 1);
+                        busca_combinacao(m, joia, 1, sel1, sel2);
                         estado_do_jogo = GERA_JOIAS;
                     }
                 }
@@ -227,11 +226,10 @@ int main()
                         //     troca_combinacao_linha(m, joia, 2);
                         // else
                             troca_combinacao_linha(m, joia, 1);
-                        gera_novas_joias(m, joia);
+                        gera_novas_joias(m);
                         // printf("aaaa porraaa \n");
                         zera_combinacao(joia);
                         estado_do_jogo == JOGO;
-                        sleep(0.5);
                     }   
                     else
                         estado_do_jogo = GERA_JOIAS;
@@ -241,22 +239,20 @@ int main()
                     if(animacao_combinacao_coluna(m, joia))
                     {
                         troca_combinacao_coluna(m, joia);
-                        printf("aaaa porraaa \n");
-                        gera_novas_joias(m, joia);
+                        gera_novas_joias(m);
                         zera_combinacao(joia);
                         estado_do_jogo = JOGO;
-                        sleep(0.5);
                     }
                     else
                         estado_do_jogo = GERA_JOIAS;
                 }
-                if((estado_do_jogo == JOGO)&&(busca_combinacao(m, joia, 0)))
+                if((estado_do_jogo == JOGO)&&(busca_combinacao(m, joia, 0, sel1, sel2)))
                 {
-                    printf("ainda ha combinacoes \n");
+                    gera_novas_joias(m);
                     // busca_combinacao(m, joia, 1);
                     estado_do_jogo = GERA_JOIAS;
                 }
-                if((!(busca_combinacao(m, joia, 0)))&&(estado_do_jogo = JOGO))
+                if((!(busca_combinacao(m, joia, 0, sel1, sel2)))&&(estado_do_jogo = JOGO))
                     estado_do_jogo = JOGO;                   
                 desenha_matrix(m);
             }

@@ -118,24 +118,25 @@ int animacao_combinacao_linha(MATRIX_t **m, combinacao_t *joia)
                     return 1;
                 if (i == 9)
                     m[i][j].sel = 0;
-                m[i][j].py += 2;
+                m[i][j].py += 4;
             }
         }
     // }
     return 0;
 }
 
-void gera_novas_joias(MATRIX_t **m, combinacao_t *joia)
+void gera_novas_joias(MATRIX_t **m)
 {
-    int j = joia->j1_inicio;
-    int tam_combinacao = joia->i1_final - joia->i1_inicio + 1;
-    for (int i = 0; i < tam_combinacao; i++)
+    for (int i = 0; i < 10; i++)
     {
-        m[i][j].sel = 3;
-        m[i][j].joias = rand() % 4;
-
-        while ((testa_coluna(m, i, j)) || (testa_linha(m, i, j)))
+        for (int j = 0; j < 10; j ++)
+        {
+            m[i][j].sel = 3;
             m[i][j].joias = rand() % 4;
+
+            while ((testa_coluna(m, i, j)) || (testa_linha(m, i, j)))
+                m[i][j].joias = rand() % 4;
+        }
     }
 }
 
@@ -154,7 +155,7 @@ int animacao_combinacao_coluna(MATRIX_t **m, combinacao_t *joia)
         if(m[i][j].py > aux)
             return 1;
         m[i][j].sel = 0;
-        m[i][j].py += 2;
+        m[i][j].py += 4;
     }
 
     return 0;
