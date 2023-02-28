@@ -29,7 +29,6 @@ int testa_coluna(MATRIX_t **m, int i, int j)
 MATRIX_t** inicia_matrix(int tam)
 {
     int dx = 220;
-    int dy1 = 0;
 
     MATRIX_t **m;
 
@@ -76,8 +75,9 @@ MATRIX_t** inicia_matrix(int tam)
     return m;
 }
 
-void desenha_matrix(MATRIX_t **m)
+void desenha_matrix(MATRIX_t **m, game_addons_t *addon, int pontuacao)
 {
+    al_draw_textf(addon->font, al_map_rgb(255, 255, 255), 10, 10, 0, "pontuacao %d ", pontuacao);
     for(int i = 0; i < 20; i++)
     {
         for(int j = 0; j < 10; j++)

@@ -27,6 +27,6 @@ int testa_coluna(MATRIX_t **m, int i, int j);
 
 MATRIX_t** inicia_matrix(int tam);
 
-void desenha_matrix(MATRIX_t **m);
+void desenha_matrix(MATRIX_t **m, game_addons_t *addon, int pontuacao);
 
 #endif

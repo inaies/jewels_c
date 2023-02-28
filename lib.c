@@ -5,6 +5,7 @@
 // #include <allegro5/allegro_image.h>
 // #include <allegro5/allegro_primitives.h>
 #include "lib.h"
+#define display_size 700
 
 sprites_t sprite;
 
@@ -17,19 +18,57 @@ void must_init(bool test, const char *description)
     exit(1);
 }
 
+void destroi_addons(game_addons_t *addons)
+{
+    al_destroy_bitmap(addons->image);
+    al_destroy_display(addons->display);
+    al_destroy_timer(addons->timer);
+    al_destroy_event_queue(addons->queue);
+    al_destroy_sample(addons->som_combinacao);
+    al_destroy_font(addons->font);
+}
+
+game_addons_t* init_game_addons()
+{
+    game_addons_t *addons = malloc(sizeof(game_addons_t));
+        
+    addons->font = al_create_builtin_font();//incializa addons->addons->font a ser usada
+    must_init(addons->font, "font");
+
+    addons->timer = al_create_timer(1.0 / 60.0); // timer do jogo
+
+    must_init(addons->timer, "timer");
+
+    addons->queue = al_create_event_queue(); // fila de eventos   
+    must_init(addons->queue, "queue");
+
+    addons->display = al_create_display(display_size, display_size); //inicializa as configuracoes do display
+    must_init(addons->display, "display");
+
+    must_init(al_install_audio(), "áudio");
+    must_init(al_init_acodec_addon(), "codec de áudio");
+    addons->som_combinacao = al_load_sample("resources/combinacao.opus");
+
+    must_init(al_init_image_addon(), "image addon");
+
+    addons->image = al_load_bitmap("resources/jewels.png");
+    must_init(addons->image, "image");
+
+    return(addons);
+}
 
 void inicia_sprites() 
 {
-    sprite.amarela = al_load_bitmap("joia_amarela.png");
+    sprite.amarela = al_load_bitmap("resources/joia_amarela.png");
     must_init(sprite.amarela, "image");
 
-    sprite.azul = al_load_bitmap("joia_azul.png");
+    sprite.azul = al_load_bitmap("resources/joia_azul.png");
     must_init(sprite.azul, "image");
 
-    sprite.verde = al_load_bitmap("joia_verde.png");
+    sprite.verde = al_load_bitmap("resources/joia_verde.png");
     must_init(sprite.verde, "image");
 
-    sprite.rosa = al_load_bitmap("joia_rosa.png");
+    sprite.rosa = al_load_bitmap("resources/joia_rosa.png");
     must_init(sprite.rosa, "image");
 }
 

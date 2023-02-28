@@ -2,20 +2,23 @@
 #include "time.h"
 #define tam 10
 
-int encontra_joia_selecionada(combinacao_t *joia, MATRIX_t *sel1, MATRIX_t *sel2)
+int calcula_pontuacao(combinacao_t *joia, int nivel)
 {
-    if((joia->i1_inicio == joia->i1_final)&&((joia->j1_final - joia->j1_inicio)>=4))
+    int pontuacao_comb;
+    if(joia->i1_final == joia->i1_inicio)
     {
-        for (int j = joia->j1_inicio; j < joia->j1_final; j++)
-        {
-            if((sel1->i)&&())
-        }
+        pontuacao_comb = ((joia->j1_final - joia->j1_inicio)+1) * nivel;
     }
+    if(joia->j1_final == joia->j1_inicio)
+    {
+        pontuacao_comb = ( (joia->i1_final - joia->i1_inicio)+1) * nivel;
+    }
+    return pontuacao_comb;
 }
 
 int busca_combinacao(MATRIX_t **m, combinacao_t *joia, int segunda_combinacao, MATRIX_t *sel1, MATRIX_t *sel2)
 {
-    int comeco1, comeco2;
+    int comeco2;
     if (segunda_combinacao == 0)
         for (int i = 10; i < 20; i++)
         {
@@ -23,11 +26,6 @@ int busca_combinacao(MATRIX_t **m, combinacao_t *joia, int segunda_combinacao, M
             {
                 if(busca_combinacao_troca(m, i, j, joia, 0))
                 {
-                    if(((joia->i1_final - joia->i1_inicio)>= 3)||((joia->j1_final - joia->j1_inicio)>= 3))
-                    {
-                        printf("combinacao com mais de 3 joias \n");
-                        encontra_joia_selecionada(joia, sel1, sel2);
-                    }
                     return 1;
                 }
             }

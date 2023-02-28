@@ -1,5 +1,5 @@
 CFLAGS=-Wall -std=c99 
-LIBS=-lm -lallegro_ttf -lallegro_image -lallegro_primitives -lallegro_font -lallegro
+LIBS=-lm -lallegro_ttf -lallegro_image -lallegro_primitives -lallegro_acodec -lallegro_audio -lallegro_font -lallegro
 
 all: jewels
 
@@ -29,3 +29,6 @@ clean:
 
 purge: clean
 	rm -f *.o *.gch hello
+
+debug: CFLAGS += -g
+debug: all

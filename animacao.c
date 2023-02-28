@@ -4,16 +4,9 @@
 
 int troca_animacao(MATRIX_t **m, MATRIX_t *sel1, MATRIX_t *sel2)
 {
-    int joia_aux;
     int j1_x = sel1->i, j1_y = sel1->j, j2_x = sel2->i, j2_y = sel2->j;
-    joia_aux = m[j1_x][j1_y].joias;
-    // m[j1_x][j1_y].joias = m[j2_x][j2_y].joias;
-    // m[j2_x][j2_y].joias = joia_aux;
     m[j1_x][j1_y].sel = 0;
     m[j2_x][j2_y].sel = 0;
-
-    //printf(" j1 px %d j2 px %d \n", m[j1_x][j1_y].px, m[j2_x][j2_y].px);
-    //printf(" j1 py %d j2 py %d \n", m[j1_x][j1_y].py, m[j2_x][j2_y].py);
 
     if(sel1->i == sel2->i)
     {
@@ -89,39 +82,18 @@ int animacao_combinacao_linha(MATRIX_t **m, combinacao_t *joia)
     for (int j = joia->j1_inicio; j <= joia->j1_final; j++)
         m[joia->i1_inicio][j].sel = 3;
 
-    // if((joia->i2_inicio == joia->i2_final)&&(joia->i2_inicio != -1))
-    // {
-    //     for(int j = joia->j2_inicio; j <= joia->j2_final; j++)
-    //         m[joia->i2_inicio][j].sel = 3;
-
-    //     if((joia->j1_inicio == joia->j2_inicio)&&(joia->j1_final == joia->j2_final))
-    //     {
-    //         for (int j = joia->j2_inicio; j <= joia->j2_final; j++)
-    //         {
-    //             for (int i = (joia->i1_inicio - 2); i > 0; i--)
-    //             {
-    //                 if (m[i][joia->j1_final].py >= aux)
-    //                     return 1;
-    //                 m[i][j].sel = 0;
-    //                 m[i][j].py += 5;
-    //             }
-    //         }
-    //     }
-    // }
-    // else
-    // {
-        for (int j = joia->j1_inicio; j <= joia->j1_final; j++)
+    for (int j = joia->j1_inicio; j <= joia->j1_final; j++)
+    {
+        for (int i = (joia->i1_inicio - 1); i > 0; i--)
         {
-            for (int i = (joia->i1_inicio - 1); i > 0; i--)
-            {
-                if (m[i][joia->j1_final].py >= aux)
-                    return 1;
-                if (i == 9)
-                    m[i][j].sel = 0;
-                m[i][j].py += 4;
-            }
+            if (m[i][joia->j1_final].py >= aux)
+                return 1;
+            if (i == 9)
+                m[i][j].sel = 0;
+            m[i][j].py += 4;
         }
-    // }
+    }
+
     return 0;
 }
 
@@ -199,7 +171,6 @@ void zera_combinacao(combinacao_t *joia)
 
 void troca_combinacao_linha(MATRIX_t **m, combinacao_t *joia, int qntd_comb)
 {
-    // m = m_aux;
 
     for (int j = joia->j1_inicio; j <= joia->j1_final; j++)
     {
